@@ -1,6 +1,8 @@
 $(document).ready(function () {
   const volumeControl = document.querySelector("#volume")
   const player = document.querySelector('#player');
+  const timeLine = document.querySelector("#timeline");
+  const musicTime = document.querySelector("#time");
   volumeControl.addEventListener('change', function () {
     player.volume = volumeControl.value / 10;
   });
@@ -8,6 +10,7 @@ $(document).ready(function () {
   $("#player").on("canplaythrough", function (e) {
     var seconds = e.currentTarget.duration;
     setMusicTime(seconds);
+    timeLine.setAttribute("max", Math.round(seconds));
   });
 
   let isRepeating = false;
@@ -59,8 +62,9 @@ $(document).ready(function () {
   PrevPlay();
   PauseAudio();
   RepeatAudio(isRepeating);
-
-  // setMusicTime(player.duration);
+  player.addEventListener("timeupdate", function () {
+    musicCountUpdate(Math.floor(player.currentTime));
+  });
 
   player.onended = function () {
     let audioActive = document.querySelector('.list-item.isPlaying');
@@ -80,7 +84,6 @@ $(document).ready(function () {
     itemNext.querySelector('button.btn').classList.remove('icon-play');
     const songName = itemNext.querySelector('span').innerText;
     player.src = `/static/music/${songName}`;
-    setMusicTime(player.duration);
     player.play();
     itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
@@ -216,4 +219,10 @@ function formatTime(digitalTime) {
     var result = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
   return result;
+}
+
+function musicCountUpdate() {
+  const musicTimeCount = document.querySelector("#time-count");
+  musicTimeCount.innerHTML = formatTime(Math.round(player.currentTime));
+  document.getElementById('timeline').value = Math.round(player.currentTime);
 }

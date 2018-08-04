@@ -2,7 +2,9 @@ $(document).ready(function () {
   const volumeControl = document.querySelector("#volume")
   const player = document.querySelector('#player');
   const timeLine = document.querySelector("#timeline");
-  const musicTime = document.querySelector("#time");
+  const btnRandom = document.querySelector("#random");
+  let isRepeating = false;
+  var isRandomized = false;
   volumeControl.addEventListener('change', function () {
     player.volume = volumeControl.value / 10;
   });
@@ -13,7 +15,16 @@ $(document).ready(function () {
     timeLine.setAttribute("max", Math.round(seconds));
   });
 
-  let isRepeating = false;
+  btnRandom.addEventListener("click", () => {
+    if (!isRandomized) {
+      btnRandom.classList.add('on');
+      isRandomized = true;
+    } else {
+      btnRandom.classList.remove('on');
+      isRandomized = false;
+    }
+  });
+
   document.querySelectorAll('.list-item').forEach((listItem) => {
     listItem.addEventListener('click', () => {
       if (listItem.classList.contains("isPlaying")) {
@@ -58,7 +69,45 @@ $(document).ready(function () {
       }
     });
   });
-  NextPlay();
+  document.querySelector('#next').addEventListener('click', () => {
+    let listItems = document.querySelectorAll('.list-item');
+    for (let i = 0; i < listItems.length; i++) {
+      let listItem = listItems[i];
+      if (listItem.classList.contains('isPlaying')) {
+        let scrollTop = listItem.offsetTop;
+        document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+
+        if (!isRandomized) {
+          var itemNext = listItem.nextElementSibling;
+          console.log('not RamDom');
+        } else {
+          var itemNext = listItem.nextElementSibling;
+          console.log('Da radom');
+        }
+        if (!itemNext) {
+          itemNext = listItems[0];
+          document.querySelector('.play-list-wrap').scrollTo(0, 0);
+        }
+        listItem.classList.remove('isPlaying');
+        listItem.querySelector('button.btn').classList.remove('icon-pause');
+        listItem.querySelector('button.btn').classList.add('icon-play');
+        listItem.removeChild(listItem.querySelector('#list-icon-0'));
+        itemNext.classList.add('isPlaying');
+        itemNext.querySelector('button.btn').classList.add('icon-pause');
+        itemNext.querySelector('button.btn').classList.remove('icon-play');
+        const songName = itemNext.querySelector('span').innerText;
+        player.src = `/static/music/${songName}`;
+        player.play();
+        itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                </span>`;
+
+        return 0;
+      }
+    }
+  });
   PrevPlay();
   PauseAudio();
   RepeatAudio(isRepeating);
@@ -95,40 +144,7 @@ $(document).ready(function () {
   };
 });
 
-function NextPlay() {
-  document.querySelector('#next').addEventListener('click', () => {
-    let listItems = document.querySelectorAll('.list-item');
-    for (let i = 0; i < listItems.length; i++) {
-      let listItem = listItems[i];
-      if (listItem.classList.contains('isPlaying')) {
-        let scrollTop = listItem.offsetTop;
-        document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
-        let itemNext = listItem.nextElementSibling;
-        if (!itemNext) {
-          itemNext = listItems[0];
-          document.querySelector('.play-list-wrap').scrollTo(0, 0);
-        }
-        listItem.classList.remove('isPlaying');
-        listItem.querySelector('button.btn').classList.remove('icon-pause');
-        listItem.querySelector('button.btn').classList.add('icon-play');
-        listItem.removeChild(listItem.querySelector('#list-icon-0'));
-        itemNext.classList.add('isPlaying');
-        itemNext.querySelector('button.btn').classList.add('icon-pause');
-        itemNext.querySelector('button.btn').classList.remove('icon-play');
-        const songName = itemNext.querySelector('span').innerText;
-        player.src = `/static/music/${songName}`;
-        player.play();
-        itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                </span>`;
-
-        return 0;
-      }
-    }
-  });
-}
+  
 
 function PrevPlay() {
   document.querySelector('#prev').addEventListener('click', () => {

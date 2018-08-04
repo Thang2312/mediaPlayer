@@ -108,9 +108,68 @@ $(document).ready(function () {
       }
     }
   });
-  PrevPlay();
-  PauseAudio();
-  RepeatAudio(isRepeating);
+  document.querySelector('#prev').addEventListener('click', () => {
+    let listItems = document.querySelectorAll('.list-item');
+    for (let i = 0; i < listItems.length; i++) {
+      let listItem = listItems[i];
+      if (listItem.classList.contains('isPlaying')) {
+        let itemPrev = listItem.previousElementSibling;
+        if (!itemPrev) {
+          itemPrev = listItems[listItems.length - 1];
+        }
+        listItem.classList.remove('isPlaying');
+        listItem.querySelector('button.btn').classList.remove('icon-pause');
+        listItem.querySelector('button.btn').classList.add('icon-play');
+        listItem.removeChild(listItem.querySelector('#list-icon-0'));
+        itemPrev.classList.add('isPlaying');
+        itemPrev.querySelector('button.btn').classList.add('icon-pause');
+        itemPrev.querySelector('button.btn').classList.remove('icon-play');
+        const songName = itemPrev.querySelector('span').innerText;
+        player.src = `/static/music/${songName}`;
+        player.play();
+        itemPrev.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                    <span class="bar"></span>
+                                </span>`;
+
+        return 0;
+      }
+    }
+  });
+  document.querySelector('#btn-play').addEventListener('click', () => {
+    if (document.querySelector('#btn-play').classList.contains("icon-pause")) {
+      player.pause();
+      document.querySelector('#btn-play').classList.remove('icon-pause');
+      document.querySelector('#btn-play').classList.add('icon-play');
+    } else {
+      player.play();
+      document.querySelector('#btn-play').classList.remove('icon-play');
+      document.querySelector('#btn-play').classList.add('icon-pause');
+    }
+    if (document.querySelector('.isPlaying button.btn').classList.contains("icon-pause")) {
+      player.pause();
+      document.querySelector('.isPlaying button.btn').classList.remove('icon-pause');
+      document.querySelector('.isPlaying button.btn').classList.add('icon-play');
+    } else {
+      player.play();
+      document.querySelector('.isPlaying button.btn').classList.remove('icon-play');
+      document.querySelector('.isPlaying button.btn').classList.add('icon-pause');
+    }
+  });
+  document.querySelector("#repeat").addEventListener('click', () => {
+    btnRepeat = document.querySelector("#repeat");
+    audio = document.querySelector("#player");
+    if (isRepeating === false) {
+      btnRepeat.classList.add("on");
+      audio.setAttribute("loop", "");
+      isRepeating = true;
+    } else {
+      btnRepeat.classList.remove("on");
+      audio.removeAttribute("loop");
+      isRepeating = false;
+    }
+  });
   player.addEventListener("timeupdate", function () {
     musicCountUpdate(Math.floor(player.currentTime));
   });
@@ -144,78 +203,6 @@ $(document).ready(function () {
   };
 });
 
-  
-
-function PrevPlay() {
-  document.querySelector('#prev').addEventListener('click', () => {
-    let listItems = document.querySelectorAll('.list-item');
-    for (let i = 0; i < listItems.length; i++) {
-      let listItem = listItems[i];
-      if (listItem.classList.contains('isPlaying')) {
-        let itemPrev = listItem.previousElementSibling;
-        if (!itemPrev) {
-          itemPrev = listItems[listItems.length - 1];
-        }
-        listItem.classList.remove('isPlaying');
-        listItem.querySelector('button.btn').classList.remove('icon-pause');
-        listItem.querySelector('button.btn').classList.add('icon-play');
-        listItem.removeChild(listItem.querySelector('#list-icon-0'));
-        itemPrev.classList.add('isPlaying');
-        itemPrev.querySelector('button.btn').classList.add('icon-pause');
-        itemPrev.querySelector('button.btn').classList.remove('icon-play');
-        const songName = itemPrev.querySelector('span').innerText;
-        player.src = `/static/music/${songName}`;
-        player.play();
-        itemPrev.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                </span>`;
-
-        return 0;
-      }
-    }
-  });
-}
-
-function PauseAudio() {
-  document.querySelector('#btn-play').addEventListener('click', () => {
-    if (document.querySelector('#btn-play').classList.contains("icon-pause")) {
-      player.pause();
-      document.querySelector('#btn-play').classList.remove('icon-pause');
-      document.querySelector('#btn-play').classList.add('icon-play');
-    } else {
-      player.play();
-      document.querySelector('#btn-play').classList.remove('icon-play');
-      document.querySelector('#btn-play').classList.add('icon-pause');
-    }
-    if (document.querySelector('.isPlaying button.btn').classList.contains("icon-pause")) {
-      player.pause();
-      document.querySelector('.isPlaying button.btn').classList.remove('icon-pause');
-      document.querySelector('.isPlaying button.btn').classList.add('icon-play');
-    } else {
-      player.play();
-      document.querySelector('.isPlaying button.btn').classList.remove('icon-play');
-      document.querySelector('.isPlaying button.btn').classList.add('icon-pause');
-    }
-  });
-}
-
-function RepeatAudio(isRepeating) {
-  document.querySelector("#repeat").addEventListener('click', () => {
-    btnRepeat = document.querySelector("#repeat");
-    audio = document.querySelector("#player");
-    if (isRepeating === false) {
-      btnRepeat.classList.add("on");
-      audio.setAttribute("loop", "");
-      isRepeating = true;
-    } else {
-      btnRepeat.classList.remove("on");
-      audio.removeAttribute("loop");
-      isRepeating = false;
-    }
-  });
-}
 
 function setMusicTime(time) {
   const musicTime = document.querySelector("#time");

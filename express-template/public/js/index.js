@@ -71,22 +71,31 @@ $(document).ready(function () {
   });
   document.querySelector('#next').addEventListener('click', () => {
     let listItems = document.querySelectorAll('.list-item');
+    var itemNext;
     for (let i = 0; i < listItems.length; i++) {
       let listItem = listItems[i];
       if (listItem.classList.contains('isPlaying')) {
         let scrollTop = listItem.offsetTop;
         document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
-
         if (!isRandomized) {
-          var itemNext = listItem.nextElementSibling;
-          console.log('not RamDom');
+          if (listItem === listItems[listItems.length - 1]) {
+            itemNext = listItems[0];
+            document.querySelector('.play-list-wrap').scrollTo(0, 0);
+          } else {
+            itemNext = listItem.nextElementSibling;
+            let scrollTop = itemNext.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
         } else {
-          var itemNext = listItem.nextElementSibling;
+          if (listItem === listItems[listItems.length - 1]) {
+            itemNext = listItems[0];
+            document.querySelector('.play-list-wrap').scrollTo(0, 0);
+          } else {
+            itemNext = listItems[Math.floor(Math.random() * $('ul li').length + 1)];
+            let scrollTop = itemNext.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
           console.log('Da radom');
-        }
-        if (!itemNext) {
-          itemNext = listItems[0];
-          document.querySelector('.play-list-wrap').scrollTo(0, 0);
         }
         listItem.classList.remove('isPlaying');
         listItem.querySelector('button.btn').classList.remove('icon-pause');
@@ -110,12 +119,34 @@ $(document).ready(function () {
   });
   document.querySelector('#prev').addEventListener('click', () => {
     let listItems = document.querySelectorAll('.list-item');
+    var itemPrev;
     for (let i = 0; i < listItems.length; i++) {
       let listItem = listItems[i];
       if (listItem.classList.contains('isPlaying')) {
-        let itemPrev = listItem.previousElementSibling;
-        if (!itemPrev) {
-          itemPrev = listItems[listItems.length - 1];
+        let scrollTop = listItem.offsetTop;
+        document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+        if (!isRandomized) {
+          if (listItem === listItems[0]) {
+            itemPrev = listItems[listItems.length - 1];
+            document.querySelector('.play-list-wrap').scrollTo(0, itemPrev.offsetTop);
+          }
+          else {
+            itemPrev = listItem.previousElementSibling;
+            let scrollTop = itemPrev.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
+        } else {
+          if (listItem === listItems[0]) {
+            itemPrev = listItems[listItems.length - 1];
+            document.querySelector('.play-list-wrap').scrollTo(0, itemPrev.offsetTop);
+          }
+          else {
+            itemPrev = listItems[Math.floor(Math.random() * $('ul li').length + 1)];
+            let scrollTop = itemPrev.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
+
+          console.log('Da radom');
         }
         listItem.classList.remove('isPlaying');
         listItem.querySelector('button.btn').classList.remove('icon-pause');
@@ -175,31 +206,52 @@ $(document).ready(function () {
   });
 
   player.onended = function () {
-    let audioActive = document.querySelector('.list-item.isPlaying');
-    let itemNext = audioActive.nextElementSibling;
-    let scrollTop = itemNext.offsetTop;
-    document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
-    if (!itemNext) {
-      itemNext = listItems[0];
-      document.querySelector('.play-list-wrap').scrollTo(0, 0);
-    }
-    audioActive.classList.remove('isPlaying');
-    audioActive.querySelector('button.btn').classList.remove('icon-pause');
-    audioActive.querySelector('button.btn').classList.add('icon-play');
-    audioActive.removeChild(audioActive.querySelector('#list-icon-0'));
-    itemNext.classList.add('isPlaying');
-    itemNext.querySelector('button.btn').classList.add('icon-pause');
-    itemNext.querySelector('button.btn').classList.remove('icon-play');
-    const songName = itemNext.querySelector('span').innerText;
-    player.src = `/static/music/${songName}`;
-    player.play();
-    itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
+    let listItems = document.querySelectorAll('.list-item');
+    var itemNext;
+    for (let i = 0; i < listItems.length; i++) {
+      let listItem = listItems[i];
+      if (listItem.classList.contains('isPlaying')) {
+        let scrollTop = listItem.offsetTop;
+        document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+        if (!isRandomized) {
+          if (listItem === listItems[listItems.length - 1]) {
+            itemNext = listItems[0];
+            document.querySelector('.play-list-wrap').scrollTo(0, 0);
+          } else {
+            itemNext = listItem.nextElementSibling;
+            let scrollTop = itemNext.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
+        } else {
+          if (listItem === listItems[listItems.length - 1]) {
+            itemNext = listItems[0];
+            document.querySelector('.play-list-wrap').scrollTo(0, 0);
+          } else {
+            itemNext = listItems[Math.floor(Math.random() * $('ul li').length + 1)];
+            let scrollTop = itemNext.offsetTop;
+            document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
+          }
+          console.log('Da radom');
+        }
+        listItem.classList.remove('isPlaying');
+        listItem.querySelector('button.btn').classList.remove('icon-pause');
+        listItem.querySelector('button.btn').classList.add('icon-play');
+        listItem.removeChild(listItem.querySelector('#list-icon-0'));
+        itemNext.classList.add('isPlaying');
+        itemNext.querySelector('button.btn').classList.add('icon-pause');
+        itemNext.querySelector('button.btn').classList.remove('icon-play');
+        const songName = itemNext.querySelector('span').innerText;
+        player.src = `/static/music/${songName}`;
+        player.play();
+        itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
                                     <span class="bar"></span>
                                     <span class="bar"></span>
                                 </span>`;
 
-    return 0;
+        return 0;
+      }
+    }
   };
 });
 

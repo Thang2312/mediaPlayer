@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
   const volumeControl = document.querySelector("#volume")
   const player = document.querySelector('#player');
   const timeLine = document.querySelector("#timeline");
@@ -35,6 +36,15 @@ $(document).ready(function () {
           document.querySelector('#btn-play').classList.remove('icon-pause');
           document.querySelector('#btn-play').classList.add('icon-play');
         } else {
+          console.log(player.src);
+
+          if (player.src) {
+            let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+            readTextFile(nameAss).then((data) => {
+              document.querySelector('.rabbit-lyrics').textContent = data;
+              runLrc();
+            });
+          }
           player.play();
           listItem.querySelector('button.btn').classList.remove('icon-play');
           listItem.querySelector('button.btn').classList.add('icon-pause');
@@ -59,6 +69,14 @@ $(document).ready(function () {
         document.querySelector('#btn-play').classList.add('icon-pause');
         const songName = listItem.querySelector('span').innerText;
         player.src = `/static/music/${songName}`;
+        console.log(player.src);
+        if (player.src) {
+          let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+          readTextFile(nameAss).then((data) => {
+            document.querySelector('.rabbit-lyrics').textContent = data;
+            runLrc();
+          });
+        }
         player.play();
         listItem.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                   <span class="bar"></span>
@@ -106,6 +124,13 @@ $(document).ready(function () {
         itemNext.querySelector('button.btn').classList.remove('icon-play');
         const songName = itemNext.querySelector('span').innerText;
         player.src = `/static/music/${songName}`;
+        if (player.src) {
+          let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+          readTextFile(nameAss).then((data) => {
+            document.querySelector('.rabbit-lyrics').textContent = data;
+            runLrc();
+          });
+        }
         player.play();
         itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
@@ -157,6 +182,13 @@ $(document).ready(function () {
         itemPrev.querySelector('button.btn').classList.remove('icon-play');
         const songName = itemPrev.querySelector('span').innerText;
         player.src = `/static/music/${songName}`;
+        if (player.src) {
+          let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+          readTextFile(nameAss).then((data) => {
+            document.querySelector('.rabbit-lyrics').textContent = data;
+            runLrc();
+          });
+        }
         player.play();
         itemPrev.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
@@ -281,3 +313,38 @@ function musicCountUpdate() {
   musicTimeCount.innerHTML = formatTime(Math.round(player.currentTime));
   document.getElementById('timeline').value = Math.round(player.currentTime);
 }
+
+function readTextFile(nameAss) {
+  return new Promise((resolve) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", `/static/ass/${nameAss}`, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        var allText = xhr.responseText;
+        resolve(allText);
+      }
+    }
+    xhr.send();
+  });
+}
+
+function runLrc() {
+  let elements = document.getElementsByClassName('rabbit-lyrics');
+
+  for (let i = 0; i < elements.length; i++) {
+    let element = elements[i];
+    let mediaElements = document.querySelector(element.dataset.media);
+    let mediaElement = mediaElements ? mediaElements[0] : null;
+    let { viewMode, height, theme } = element.dataset;
+    let options = {
+      element,
+      mediaElement,
+      viewMode,
+      height,
+      theme
+    };
+    new RabbitLyrics(options);
+  }
+}
+
+

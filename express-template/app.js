@@ -1,5 +1,4 @@
 const path = require('path');
-
 const express = require('express');
 
 const app = express();
@@ -11,8 +10,8 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   fileName().then((nameFiles) => {
-      res.render('index',{name : nameFiles});
-    });
+    res.render('index', { name: nameFiles });
+  });
 });
 
 app.listen(8080, () => {

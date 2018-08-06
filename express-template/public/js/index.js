@@ -45,7 +45,9 @@ $(document).ready(function () {
               runLrc();
             });
           }
-          player.play();
+          if (player.readyState === 4) {
+            player.play();
+          }
           listItem.querySelector('button.btn').classList.remove('icon-play');
           listItem.querySelector('button.btn').classList.add('icon-pause');
           document.querySelector('#btn-play').classList.remove('icon-play');
@@ -77,7 +79,9 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        player.play();
+        if (player.readyState === 4) {
+          player.play();
+        }
         listItem.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                   <span class="bar"></span>
                                   <span class="bar"></span>
@@ -131,7 +135,9 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        player.play();
+        if (player.readyState === 4) {
+          player.play();
+        }
         itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
                                     <span class="bar"></span>
@@ -154,8 +160,7 @@ $(document).ready(function () {
           if (listItem === listItems[0]) {
             itemPrev = listItems[listItems.length - 1];
             document.querySelector('.play-list-wrap').scrollTo(0, itemPrev.offsetTop);
-          }
-          else {
+          } else {
             itemPrev = listItem.previousElementSibling;
             let scrollTop = itemPrev.offsetTop;
             document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
@@ -164,8 +169,7 @@ $(document).ready(function () {
           if (listItem === listItems[0]) {
             itemPrev = listItems[listItems.length - 1];
             document.querySelector('.play-list-wrap').scrollTo(0, itemPrev.offsetTop);
-          }
-          else {
+          } else {
             itemPrev = listItems[Math.floor(Math.random() * $('ul li').length + 1)];
             let scrollTop = itemPrev.offsetTop;
             document.querySelector('.play-list-wrap').scrollTo(0, scrollTop);
@@ -189,7 +193,9 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        player.play();
+        if (player.readyState === 4) {
+          player.play();
+        }
         itemPrev.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
                                     <span class="bar"></span>
@@ -274,7 +280,16 @@ $(document).ready(function () {
         itemNext.querySelector('button.btn').classList.remove('icon-play');
         const songName = itemNext.querySelector('span').innerText;
         player.src = `/static/music/${songName}`;
-        player.play();
+        if (player.readyState === 4) {
+          player.play();
+        }
+        if (player.src) {
+          let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+          readTextFile(nameAss).then((data) => {
+            document.querySelector('.rabbit-lyrics').textContent = data;
+            runLrc();
+          });
+        }
         itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>
                                     <span class="bar"></span>
@@ -335,7 +350,11 @@ function runLrc() {
     let element = elements[i];
     let mediaElements = document.querySelector(element.dataset.media);
     let mediaElement = mediaElements ? mediaElements[0] : null;
-    let { viewMode, height, theme } = element.dataset;
+    let {
+      viewMode,
+      height,
+      theme
+    } = element.dataset;
     let options = {
       element,
       mediaElement,
@@ -346,5 +365,3 @@ function runLrc() {
     new RabbitLyrics(options);
   }
 }
-
-

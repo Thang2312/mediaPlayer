@@ -45,7 +45,10 @@ $(document).ready(function () {
               runLrc();
             });
           }
-          if (player.readyState === 4) {
+          var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
+          player.readyState > 2;
+
+          if (!isPlaying) {
             player.play();
           }
           listItem.querySelector('button.btn').classList.remove('icon-play');
@@ -79,7 +82,10 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        if (player.readyState === 4) {
+        var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
+        player.readyState > 2;
+
+        if (!isPlaying) {
           player.play();
         }
         listItem.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
@@ -135,7 +141,10 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        if (player.readyState === 4) {
+        var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
+        player.readyState > 2;
+
+        if (!isPlaying) {
           player.play();
         }
         itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
@@ -193,7 +202,10 @@ $(document).ready(function () {
             runLrc();
           });
         }
-        if (player.readyState === 4) {
+        var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
+        player.readyState > 2;
+
+        if (!isPlaying) {
           player.play();
         }
         itemPrev.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
@@ -280,15 +292,18 @@ $(document).ready(function () {
         itemNext.querySelector('button.btn').classList.remove('icon-play');
         const songName = itemNext.querySelector('span').innerText;
         player.src = `/static/music/${songName}`;
-        if (player.readyState === 4) {
-          player.play();
-        }
         if (player.src) {
           let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
           readTextFile(nameAss).then((data) => {
             document.querySelector('.rabbit-lyrics').textContent = data;
             runLrc();
           });
+        }
+        var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
+        player.readyState > 2;
+
+        if (!isPlaying) {
+          player.play();
         }
         itemNext.innerHTML += `<span id="list-icon-0" class="sound-wave playing">
                                     <span class="bar"></span>

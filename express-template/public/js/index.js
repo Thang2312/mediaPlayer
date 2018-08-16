@@ -48,7 +48,7 @@ $(document).ready(function () {
             });
           }
           var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
-          player.readyState > 2;
+            player.readyState > 2;
 
           if (!isPlaying) {
             player.play();
@@ -85,7 +85,7 @@ $(document).ready(function () {
           });
         }
         var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
-        player.readyState > 2;
+          player.readyState > 2;
 
         if (!isPlaying) {
           player.play();
@@ -97,7 +97,7 @@ $(document).ready(function () {
                               </span>`;
 
       }
-      elementDown.dataset.src = player.src;
+      elementDown.setAttribute('href', `/download/${player.src.replace(/^.*[\\\/]/, '')}`);
     });
   });
   document.querySelector('#next').addEventListener('click', () => {
@@ -145,7 +145,7 @@ $(document).ready(function () {
           });
         }
         var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
-        player.readyState > 2;
+          player.readyState > 2;
 
         if (!isPlaying) {
           player.play();
@@ -156,6 +156,7 @@ $(document).ready(function () {
                                     <span class="bar"></span>
                                 </span>`;
 
+        elementDown.setAttribute('href', `/download/${player.src.replace(/^.*[\\\/]/, '')}`);
         return 0;
       }
     }
@@ -206,7 +207,7 @@ $(document).ready(function () {
           });
         }
         var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
-        player.readyState > 2;
+          player.readyState > 2;
 
         if (!isPlaying) {
           player.play();
@@ -216,7 +217,7 @@ $(document).ready(function () {
                                     <span class="bar"></span>
                                     <span class="bar"></span>
                                 </span>`;
-
+        elementDown.setAttribute('href', `/download/${player.src.replace(/^.*[\\\/]/, '')}`);
         return 0;
       }
     }
@@ -303,7 +304,7 @@ $(document).ready(function () {
           });
         }
         var isPlaying = player.currentTime > 0 && !player.paused && !player.ended &&
-        player.readyState > 2;
+          player.readyState > 2;
 
         if (!isPlaying) {
           player.play();
@@ -319,8 +320,16 @@ $(document).ready(function () {
     }
   };
 
-  down.addEventListener('click',() => {
-    $('#element-down').attr({'href' : $('a', this).attr('data-src'), 'download' : $('a', this).attr('data-src')});
+  down.addEventListener('click', () => {
+    $('#element-down').attr({
+      'href': $('a', this).attr('data-src'),
+      'download': $('a', this).attr('data-src')
+    });
+  });
+
+  timeline.addEventListener('change',()=> {
+    player.currentTime = timeline.value;
+    console.log(player.currentTime);
   });
 });
 

@@ -14,6 +14,12 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/download/:nameMusic',(req,res) => {
+  let filePath = __dirname + `/public/music/${req.params.nameMusic}`;
+  let fileName = req.params.nameMusic;
+  res.download(filePath, fileName);
+});
+
 app.listen(8080, () => {
   console.log(`Server running at ${PORT}`);
 });

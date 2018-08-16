@@ -598,7 +598,7 @@ input#volume {
     background-color: DodgerBlue;
     border: none;
     color: white;
-    padding: 12px 30px;
+    padding: 12px 0;
     cursor: pointer;
     font-size: 20px;
 }

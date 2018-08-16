@@ -579,11 +579,26 @@ input#volume {
 .pauseicon {
     width: 60px;
     height: 60px;
-    background-color: rgba(69,229,48, 1);
+    background-color: rgba(69, 229, 48, 1);
     margin-top: 13px;
     margin-left: 12px;
     border-left: 13px solid #fff;
     border-right: 13px solid #fff;
     width: 10px;
     height: 35px;
+}
+
+.btnic:hover {
+    background-color: RoyalBlue;
+}
+
+.btnic {
+    margin: 15px 0;
+    text-align: center;
+    background-color: DodgerBlue;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
 }

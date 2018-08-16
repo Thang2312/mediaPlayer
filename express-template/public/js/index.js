@@ -4,6 +4,8 @@ $(document).ready(function () {
   const player = document.querySelector('#player');
   const timeLine = document.querySelector("#timeline");
   const btnRandom = document.querySelector("#random");
+  const down = document.querySelector('#download');
+  const elementDown = document.querySelector('#element-down');
   let isRepeating = false;
   var isRandomized = false;
   volumeControl.addEventListener('change', function () {
@@ -95,6 +97,7 @@ $(document).ready(function () {
                               </span>`;
 
       }
+      elementDown.dataset.src = player.src;
     });
   });
   document.querySelector('#next').addEventListener('click', () => {
@@ -315,6 +318,10 @@ $(document).ready(function () {
       }
     }
   };
+
+  down.addEventListener('click',() => {
+    $('#element-down').attr({'href' : $('a', this).attr('data-src'), 'download' : $('a', this).attr('data-src')});
+  });
 });
 
 

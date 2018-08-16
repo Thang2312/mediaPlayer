@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   const volumeControl = document.querySelector("#volume")
   const player = document.querySelector('#player');
   const timeLine = document.querySelector("#timeline");
@@ -223,6 +222,7 @@ $(document).ready(function () {
     }
   });
   document.querySelector('#btn-play').addEventListener('click', () => {
+
     if (document.querySelector('#btn-play').classList.contains("icon-pause")) {
       player.pause();
       document.querySelector('#btn-play').classList.remove('icon-pause');
@@ -327,11 +327,8 @@ $(document).ready(function () {
     });
   });
 
-  timeline.addEventListener('change',()=> {
-    player.pause();
+  timeline.addEventListener('input', () => {
     player.currentTime = timeline.value;
-    player.play();
-    // console.log(player.currentTime);
   });
 });
 

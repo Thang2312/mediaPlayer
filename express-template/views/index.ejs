@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta property="fb:app_id"          content="1234567890" /> 
-    <meta property="og:type"            content="article" /> 
-    <meta property="og:url"             content="35.208.205.55:8080/" /> 
-    <meta property="og:title"           content="Media Player" /> 
-    <meta property="og:image"           content="/static/img/thang.vuvan@vietis.com.vn.jpg" /> 
-    <meta property="og:description"    content="thang.vuvan@vietis.com.vn" />
-    <meta property="fb:pages" content="/static/img/thang.vuvan@vietis.com.vn.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="fb:app_id" content="1234567890" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="35.208.205.55:8080/" />
+    <meta property="og:title" content="Media Player" />
+    <meta property="og:image" content="/static/img/a.jpg" />
+    <meta property="og:description" content="http://samples.ogp.me/390580850990722" />
+    <meta property="fb:pages" content="/static/img/a.jpg">
     <title>Web Music Player</title>
 
     <link type="text/css" rel="stylesheet" href="/static/css/structure.css">
@@ -57,7 +58,7 @@
             </p>
             <audio id="player" preload="auto">Seu browser não suporta reprodução de áudio.</audio>
             <div class="rabbit-lyrics" data-audio="#player" data-view-mode="mini">
-               
+
             </div>
             <div class="controls-wrap">
                 <button type="button" class="btn player-btn icon icon-repeat" id="repeat"></button>
@@ -76,12 +77,13 @@
                 <button type="button" class="btn player-btn icon icon-random" id="random"></button>
             </div>
 
-            <div class="music-info">
-                <div class="loading-wrap">
-                    <span id="loading-music" class="loading">Carregando...</span>
-                </div>
-                <label id="music-name"> -- </label>
-            </div>
+            <button class="btnic" id="download">
+                <!-- <i class="fa fa-download"></i> -->
+                <font style="vertical-align: inherit;">
+                    <font class="" style="vertical-align: inherit;"> Tải về</font>
+                    <a href="" style="visibility: hidden;" id=""></a>
+                </font>
+            </button>
 
             <div class="timeline-wrap">
                 <label id="time-count">00:00</label>
@@ -101,4 +103,5 @@
     </div>
 </body>
 <script src="/static/js/rabbit-lyrics.js" type="text/javascript"></script>
+
 </html>

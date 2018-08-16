@@ -328,8 +328,10 @@ $(document).ready(function () {
   });
 
   timeline.addEventListener('change',()=> {
+    player.pause();
     player.currentTime = timeline.value;
-    console.log(player.currentTime);
+    player.play();
+    // console.log(player.currentTime);
   });
 });
 

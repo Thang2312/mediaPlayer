@@ -40,7 +40,7 @@ $(document).ready(function () {
           console.log(player.src);
 
           if (player.src) {
-            let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt');
+            let nameAss = player.src.replace(/^.*[\\\/]/, '').replace('mp3', 'txt').replace('flac', 'txt');
             readTextFile(nameAss).then((data) => {
               document.querySelector('.rabbit-lyrics').textContent = data;
               runLrc();
